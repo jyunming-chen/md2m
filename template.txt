@@ -1,0 +1,32 @@
+// global variables
+t3DModel *AAA;
+float scale, center[3], size[3];
+int loopover;
+
+// init
+AAA = MD2MReadMD2 (char* meshfile, char*skinfile);
+MD2MFindDimension  (AAA, center, size);
+#define max(x,y) ((x)>(y)?(x):(y))
+#define max3(x,y,z) (max(max(x,y),max(y,z)))
+scale = max3 (size[0],size[1],size[2]);
+#undef max
+#undef max3
+MD2MSetLoop (AAA, GLboolean); 
+MD2MSetAnimation (AAA, int pose);
+MD2MSetAnimationSpeed (AAA, float Hz); 
+
+// display
+glColor3f (1,1,1);
+glPushMatrix();
+glTranslatef (0,1,0);
+glScalef (2/scale, 2/scale, 2/scale);
+glTranslatef (-center[0],-center[1],-center[2]);
+loopover = MD2MInterpolate (AAA);
+glPopMatrix();
+// set timer callback for animation
+
+// [other setting]
+glEnable (GL_TEXTURE_2D);  // turn on 2D texturing
+glDisable (GL_LIGHTING);   // no lighting (no normals)
+glEnable (GL_CULL_FACE);   // if cull-face desired
+glCullFace (GL_FRONT);     // cull the CCW (front) faces 
